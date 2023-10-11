@@ -11,7 +11,7 @@ class ItemController extends Controller
 {
     public function list()
     {
-        $list = DogProductItem::where('isdeleted', null)->get();
+        $list = DogProductItem::where('deleted_at', null)->get();
         if (!$list) return ApiResponse::notfound("Resource is empty");
         else {
             $list->transform(function ($item) {
@@ -24,7 +24,7 @@ class ItemController extends Controller
 
     public function paginationPage()
     {
-        $list = DogProductItem::where('isdeleted', null)->paginate(1);
+        $list = DogProductItem::where('deleted_at', null)->paginate(1);
         if (!$list) return ApiResponse::notfound("Resource is empty");
         else {
             $list->transform(function ($item) {
@@ -37,8 +37,8 @@ class ItemController extends Controller
 
     public function getProductbyId($rid)
     {
-        $product = DogProductItem::where('id', $rid)->first();
-        if ($product && $product->isdeleted!=true){
+        $product = DogProductItem::where('id', $rid)->where('deleted_at', null)->first();
+        if ($product){
         $product->Images = json_decode($product->Images);
         return ApiResponse::ok($product);}
         else return ApiResponse::notfound("Product Item not found");
@@ -48,9 +48,9 @@ class ItemController extends Controller
     {
         //eager loading diff from lazy loading
         //only load product where the column name contain $name
-        $find = DogProductItem::where('ItemName', $name)->first();
+        $find = DogProductItem::where('ItemName', $name)->where('deleted_at',null)->first();
 
-        if ($find && $find->isdeleted!=true) {
+        if ($find) {
             $find->Images= json_decode($find->Images);
             return ApiResponse::ok($find);
         }
@@ -101,7 +101,7 @@ class ItemController extends Controller
             'Quantity' => 'nullable|integer'
         ]);
 
-        $updated = DogProductItem::where('id', $rid)->first();
+        $updated = DogProductItem::where('id', $rid)->where('deleted_at', null)->first();
         if ($request->has('Images')) {
             $updated->images = json_encode($request->input('Images'));
         }
@@ -121,8 +121,7 @@ class ItemController extends Controller
         $deleted = DogProductItem::where('id', $rid)->first();
         if (!$deleted)  return ApiResponse::notfound("cannot find product item to delete");
         else {
-            $deleted->IsDeleted = true;
-            $deleted->save();
+            $deleted->delete();
             return response()->json("deleted successfully",200);
         }
         

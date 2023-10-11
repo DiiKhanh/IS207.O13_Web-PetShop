@@ -22,7 +22,7 @@ return new class extends Migration
             $table-> string('Images');
             $table-> integer('Quantity');
             $table-> boolean('IsInStock')->nullable();
-            $table-> boolean('IsDeleted')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
