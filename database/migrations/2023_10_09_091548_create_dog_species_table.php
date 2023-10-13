@@ -16,7 +16,8 @@ return new class extends Migration
         Schema::create('dog_species', function (Blueprint $table) {
             $table->id();
             $table->string('DogSpeciesName');
-            $table->boolean('IsDeleted');
+            //$table->boolean('IsDeleted');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

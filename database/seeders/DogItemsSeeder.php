@@ -1,10 +1,10 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use App\DogItem;
-use App\DogSpecies;
-use   Illuminate\Contracts\Container\BindingResolutionException;
+use Carbon\Carbon;
 
 class DogItemsSeeder extends Seeder
 {
@@ -17,6 +17,8 @@ class DogItemsSeeder extends Seeder
     {
         // Lấy danh sách các loài chó từ bảng dog_species
         $dogSpecies = DB::table('dog_species')->get();
+        $currentTimestamp = Carbon::now();
+
 
         // Tạo 3 mẫu dữ liệu cho bảng dog_items
         DB::table('dog_items')->insert([
@@ -31,6 +33,9 @@ class DogItemsSeeder extends Seeder
                 'HealthStatus' => 'Healthy',
                 'Description' => 'Max is a friendly and playful dog.',
                 'Images' => json_encode(['image1.jpg', 'image2.jpg', 'image3.jpg']),
+                'IsInStock' => true,
+                'created_at' => $currentTimestamp,
+                'updated_at' => $currentTimestamp,
             ],
             [
                 'DogName' => 'Bella',
@@ -43,6 +48,9 @@ class DogItemsSeeder extends Seeder
                 'HealthStatus' => 'Healthy',
                 'Description' => 'Bella is a beautiful and calm dog.',
                 'Images' => json_encode(['image4.jpg', 'image5.jpg', 'image6.jpg']),
+                'IsInStock' => true,
+                'created_at' => $currentTimestamp,
+                'updated_at' => $currentTimestamp,
             ],
             [
                 'DogName' => 'Charlie',
@@ -55,6 +63,9 @@ class DogItemsSeeder extends Seeder
                 'HealthStatus' => 'Healthy',
                 'Description' => "Charlie is an energetic and friendly dog.",
                 "Images" => json_encode(["image7.jpg", "image8.jpg", "image9.jpg"]),
+                'IsInStock' => true,
+                'created_at' => $currentTimestamp,
+                'updated_at' => $currentTimestamp,
             ]
         ]);
     }

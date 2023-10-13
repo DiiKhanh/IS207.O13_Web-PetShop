@@ -1,11 +1,10 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-
-use App\DogItem;
-use App\DogSpecies;
-use   Illuminate\Contracts\Container\BindingResolutionException;
+use Carbon\Carbon;
 
 class DogSpeciesSeeder extends Seeder
 {
@@ -16,19 +15,20 @@ class DogSpeciesSeeder extends Seeder
      */
     public function run()
     {
+        $currentTimestamp = Carbon::now();
         DB::table('dog_species')->insert([
-            ['DogSpeciesName' => 'Golden Retriever', 'IsDeleted' => false],
-            ['DogSpeciesName' => 'Alaska', 'IsDeleted' => false],
-            ['DogSpeciesName' => 'Husky', 'IsDeleted' => false],
-            ['DogSpeciesName' => 'Corgi', 'IsDeleted' => false],
-            ['DogSpeciesName' => 'Doberman', 'IsDeleted' => false],
-            ['DogSpeciesName' => 'Pitbull', 'IsDeleted' => false],
-            ['DogSpeciesName' => 'Lạp Xưởng', 'IsDeleted' => false],
-            ['DogSpeciesName' => 'Poodle', 'IsDeleted' => false],
-            ['DogSpeciesName' => 'Chihuahua', 'IsDeleted' => false],
-            ['DogSpeciesName' => 'Shiba', 'IsDeleted' => false],
-            ['DogSpeciesName' => 'Bulldog', 'IsDeleted' => false],
-            ['DogSpeciesName' => 'Beagle', 'IsDeleted' => false]
+            ['DogSpeciesName' => 'Golden Retriever',  'created_at' => $currentTimestamp, 'updated_at' => $currentTimestamp],
+            ['DogSpeciesName' => 'Alaska',  'created_at' => $currentTimestamp, 'updated_at' => $currentTimestamp],
+            ['DogSpeciesName' => 'Husky',  'created_at' => $currentTimestamp, 'updated_at' => $currentTimestamp],
+            ['DogSpeciesName' => 'Corgi',  'created_at' => $currentTimestamp, 'updated_at' => $currentTimestamp],
+            ['DogSpeciesName' => 'Doberman',  'created_at' => $currentTimestamp, 'updated_at' => $currentTimestamp],
+            ['DogSpeciesName' => 'Pitbull',  'created_at' => $currentTimestamp, 'updated_at' => $currentTimestamp],
+            ['DogSpeciesName' => 'Lạp Xưởng',  'created_at' => $currentTimestamp, 'updated_at' => $currentTimestamp],
+            ['DogSpeciesName' => 'Poodle',  'created_at' => $currentTimestamp, 'updated_at' => $currentTimestamp],
+            ['DogSpeciesName' => 'Chihuahua',  'created_at' => $currentTimestamp, 'updated_at' => $currentTimestamp],
+            ['DogSpeciesName' => 'Shiba',  'created_at' => $currentTimestamp, 'updated_at' => $currentTimestamp],
+            ['DogSpeciesName' => 'Bulldog',   'created_at' =>  $currentTimestamp, 'updated_at' =>  $currentTimestamp],
+            ['DogSpeciesName' => 'Beagle', 'created_at' =>  $currentTimestamp, 'updated_at' =>  $currentTimestamp]
         ]);
     }
 }

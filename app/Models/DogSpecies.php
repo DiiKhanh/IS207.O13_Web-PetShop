@@ -11,20 +11,22 @@ class DogSpecies extends Model
     use HasFactory, SoftDeletes;
 
     // Khai báo tên bảng
-    protected $table = 'dog_species_tbl';
+    protected $table = 'dog_species';
 
     // Khai báo khóa chính
-    protected $primaryKey = 'DOG_SPECIES_ID';
+    protected $primaryKey = 'id';
 
     // Khai báo các cột có thể gán giá trị theo mảng
     protected $fillable = [
-        'DOG_SPECIES_NAME',
-        'IS_DELETED'
+        // 'DOG_SPECIES_NAME',
+        // 'IS_DELETED'
+        'Dog_Species_Name',
+        'Is_Deleted'
     ];
     // TODO: Check lại thuộc tính có đúng không
     // Khai báo mối quan hệ với bảng dog_item_tbl
     public function dogItems()
     {
-        return $this->hasMany(DogItem::class, 'DOG_SPECIES', 'DOG_SPECIES_ID');
+        return $this->hasMany(DogItem::class, 'DogSpecies', 'id');
     }
 }

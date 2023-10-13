@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\DogItem;
+use App\Models\DogSpecies;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -59,6 +60,23 @@ class DogItemController extends Controller
                 return $item;
             });
             return ApiResponse::ok($products->toArray());
+        }
+    }
+
+    public function paginationPage()
+    {
+        //số sản phẩm mặc định được gọi trên một trang
+        $defaultDogItemCall = 2;
+        $list = DogItem::whereNull('deleted_at')->paginate($defaultDogItemCall);
+        if ($list == null) {
+            return ApiResponse::notfound("Resource is empty");
+        } else {
+            //chạy qua từng mục trong danh sách và thực hiện hàm callback được cung cấp, ở đây là chuyển đổi hình ảnh
+            $list->transform(function ($item) {
+                $item->Images = json_decode($item->Images);
+                return $item;
+            });
+            return ApiResponse::ok($list->toArray());
         }
     }
 
@@ -163,5 +181,39 @@ class DogItemController extends Controller
             $deleted->delete();
             return response()->json("deleted successfully", 200);
         }
+    }
+
+    public function testRelationship()
+    {
+        //Lưu ý: Hàm này chỉ dùng để test nên Mảng hình ảnh không cần xử lí
+        $response = [];
+
+        //relationship DogItem ->DogSpecies
+        try {
+            $dogItem = DogItem::findOrFail(1); // Thay 1 bằng ID thực tế
+            $dogSpecies = $dogItem->dogSpecies;
+            $response['DogItemToDogSpecies'] = $dogSpecies;
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            // Xử lý trường hợp không tìm thấy DogItem
+            $response['DogItemToDogSpecies'] = 'DogItem not found';
+        } catch (\Exception $e) {
+            // Xử lý bất kỳ ngoại lệ nào khác
+            $response['DogItemToDogSpecies'] = 'An error occurred';
+        }
+
+        //relationship DogSpecies -> DogItem
+        try {
+            $dogSpecies = DogSpecies::findOrFail(1); // Sử dụng findOrFail để ném ra một ngoại lệ nếu không tìm thấy DogSpecies
+            $dogItems = $dogSpecies->dogItems;
+            $response['DogSpeciesToDogItems'] = $dogItems;
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            // Xử lý trường hợp không tìm thấy DogSpecies
+            $response['DogSpeciesToDogItems'] = 'DogSpecies not found';
+        } catch (\Exception $e) {
+            // Xử lý bất kỳ ngoại lệ nào khác
+            $response['DogSpeciesToDogItems'] = 'An error occurred';
+        }
+
+        return response()->json($response);
     }
 }

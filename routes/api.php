@@ -42,7 +42,8 @@ Route::group([
     Route::get('/', 'Api\DogItemController@list');
     Route::get('/get/{id}', 'Api\DogItemController@getDogById');
     Route::get('/search/{name}', 'Api\DogItemController@getDogByName');
-    // Route::get('/all', 'Api\DogItemController@paginationPage');
+    Route::get('/all', 'Api\DogItemController@paginationPage');
+    Route::get('/testRelationship', 'Api\DogItemController@testRelationship');
     Route::middleware(['checkAdmin'])->group(function () {
         // Áp dụng middleware 'checkAdmin' chỉ cho tuyến đường '/user-admin'
         Route::post('/create', 'Api\DogItemController@create');
