@@ -21,7 +21,7 @@ return new class extends Migration
             $table-> string('Description');
             $table-> string('Images');
             $table-> integer('Quantity');
-            $table-> boolean('IsInStock')->nullable();
+            $table-> boolean('IsInStock');
             $table->softDeletes();
             $table->timestamps();
         });

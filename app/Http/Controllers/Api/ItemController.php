@@ -81,6 +81,7 @@ class ItemController extends Controller
             $add_product->Description = $request->input('Description');
             $add_product->Images = $imgjson;
             $add_product->Quantity = $request->input('Quantity');
+            $add_product->IsInStock = true;
             $add_product->save();
 
             $add_product->Images = json_decode($imgjson);
