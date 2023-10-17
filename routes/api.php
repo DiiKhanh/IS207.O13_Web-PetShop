@@ -33,7 +33,6 @@ Route::group([
     });
 });
 
-// /api/auth/
 Route::group([
     'middleware' => 'api',
     'namespace' => 'App\Http\Controllers',
@@ -51,3 +50,21 @@ Route::group([
         Route::delete('/delete/{id}', 'Api\DogItemController@delete');
     });
 });
+
+Route::group([
+    'middleware' => 'api',
+    'namespace' => 'App\Http\Controllers',
+    'prefix' => 'item'
+], function ($router) {
+    Route::get('/','Api\ItemController@list');
+    Route::get('/get/{id}','Api\ItemController@getProductbyId');
+    Route::get('/search/{name}','Api\ItemController@getProductbyName');
+    Route::get('/all', 'Api\ItemController@paginationPage');
+    Route::middleware(['checkAdmin'])->group(function () {
+        // Áp dụng middleware 'checkAdmin' chỉ cho tuyến đường '/user-admin'
+        Route::post('/create','Api\ItemController@create');
+        Route::put('/update/{id}','Api\ItemController@update');
+        Route::delete('/delete/{id}','Api\ItemController@delete');
+    });
+});
+
