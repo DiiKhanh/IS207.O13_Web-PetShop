@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\CheckOutController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -25,8 +26,8 @@ Route::group([
     Route::post('/refresh', 'Api\AuthController@refresh');
     Route::get('/user-profile', 'Api\AuthController@userProfile');
     Route::post('/change-password', 'Api\AuthController@changePassWord');
-    Route::post('/carts', 'Api\AuthController@addCarts');
-    Route::get('/get-carts', 'Api\AuthController@getCarts');
+    // Route::post('/carts', 'Api\AuthController@addCarts');
+    // Route::get('/get-carts', 'Api\AuthController@getCarts');
     Route::middleware(['checkAdmin'])->group(function () {
         // Áp dụng middleware 'checkAdmin' chỉ cho tuyến đường '/user-admin'
         Route::get('/user-admin', 'Api\AuthController@userAdmin');
@@ -68,3 +69,20 @@ Route::group([
     });
 });
 
+Route::group([
+    'namespace' => 'App\Http\Controllers',
+    'prefix' => 'cart'
+], function ($router) {
+    // middleware checkRole dùng để check xem thành viên đã đăng nhập hay chưa
+    Route::middleware(['checkRole']) -> group(function () {
+        Route::get('/get-carts', 'Api\CartController@getCarts');
+        Route::post('/add-to-cart', 'Api\CartController@addToCart');
+        Route::put('/update-quantity', 'Api\CartController@updateQuantity');
+        Route::delete('/delete-item/{cartdetailsid}', 'Api\CartController@deleteCartItem');
+        Route::delete('/delete-list', 'Api\CartController@deleteCartItemList');
+    });
+});
+
+Route::middleware(['checkRole']) -> group(function () {
+     Route::post('/check-out', [CheckOutController::class, 'checkOut']);
+});

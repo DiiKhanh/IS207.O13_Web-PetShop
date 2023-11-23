@@ -18,4 +18,14 @@ class DogProductItem extends Model
         'Images',
         'Quantity'
     ];
+
+    function cartDetails()
+    {
+        return $this->hasMany(CartDetail::class);
+    }
+
+    public function orderDetails()
+    {
+        return $this->hasMany(OrderDetail::class);
+    }
 }

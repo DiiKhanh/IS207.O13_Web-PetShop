@@ -39,13 +39,13 @@ class DogItem extends Model
     }
 
     // TODO: Sửa lại các trường sao cho đúng để liên kết được
-    // public function cartDetails()
-    // {
-    //     return $this->hasMany(CartDetail::class, 'DOG_ITEM_ID', 'DOG_ITEM_ID');
-    // }
+    public function cartDetails()
+    {
+        return $this->hasMany(CartDetail::class);
+    }
 
-    // public function orderDetails()
-    // {
-    //     return $this->hasMany(OrderDetail::class, 'DOG_ITEM_ID', 'DOG_ITEM_ID');
-    // }
+    public function orderDetails()
+    {
+        return $this->belongsTo(OrderDetail::class);
+    }
 }

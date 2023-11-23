@@ -4,19 +4,18 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Responses\ApiResponse;
-use App\Models\Cart;
 use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
     //
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('auth:api', ['except' => ['login', 'register']]);
     }
 
@@ -27,26 +26,29 @@ class AuthController extends Controller
             'password' => 'required|string',
         ]);
         $credentials = [
-            'email' => $request->email, 
+            'email' => $request->email,
             'password' => $request->password
         ];
-    
+
         if (!$token = JWTAuth::attempt($credentials)) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Unauthorized',
             ], 401);
         }
-    
+
         $user = JWTAuth::user();
-    
+
         // 
 
-        return ApiResponse::ok(['data' => $user,
-        'token' => $token]);
+        return ApiResponse::ok([
+            'data' => $user,
+            'token' => $token
+        ]);
     }
 
-    public function register(Request $request){
+    public function register(Request $request)
+    {
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
@@ -83,7 +85,8 @@ class AuthController extends Controller
         ]);
     }
 
-    public function userAdmin() {
+    public function userAdmin()
+    {
         return response()->json([
             'status' => 'success admin',
             'user' => Auth::user(),
@@ -98,34 +101,4 @@ class AuthController extends Controller
             'token' => Auth::refresh(),
         ]);
     }
-
-    public function addCarts(Request $request)
-    {
-        $cart = new Cart();
-        $cart->user_id = auth()->id();
-        $cart->cart_data = '{"key2": "value2"}'; // Cung cấp dữ liệu giỏ hàng
-        $cart->save();
-        // Thêm sản phẩm vào giỏ hàng
-        // $cart = Cart::create([
-        //     'cart_data' => "sản phẩm 1",
-        // ]);
-
-        return response()->json(['message' => 'Sản phẩm đã được thêm vào giỏ hàng', $cart]);
-    }
-
-    public function getCarts(Request $request)
-    {
-        $user = User::with('carts')->find(auth()->id());
-
-    // Kiểm tra xem người dùng có tồn tại không
-    if (!$user) {
-        return response()->json(['message' => 'Người dùng không tồn tại'], 404);
-    }
-
-    // Lấy danh sách giỏ hàng của người dùng
-    $carts = $user->carts;
-
-    return response()->json(['carts' => $carts]);
-    }
-
 }

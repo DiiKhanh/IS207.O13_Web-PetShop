@@ -8,6 +8,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
+//chạy php artisan db:seed là tự động seed hết
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -25,5 +26,7 @@ class DatabaseSeeder extends Seeder
             'created_at' => $currentTimestamp,
             'updated_at' => $currentTimestamp
         ]);
+        $this->call(DogSpeciesSeeder::class);
+        $this->call(DogItemsSeeder::class);
     }
 }
