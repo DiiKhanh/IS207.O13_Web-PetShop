@@ -20,8 +20,8 @@ return new class extends Migration
             $table->integer('total_price')->default(0);
             $table->string('address');
             $table->string('phone_number');
-            $table->enum('payment_status', ['Chua thanh toan', 'Da thanh toan', 'Da thanh toan online'])->default('Chua thanh toan');
-            $table->enum('delivery_status', ['Huy', 'Thanh cong', 'Dang giao', 'Dang lay hang', 'Dang cho xac nhan'])->default('Dang cho xac nhan');
+            $table->enum('payment_status', ['Chưa thanh toán', 'Đã thanh toán', 'Đã thanh toán online'])->default('Chưa thanh toán');
+            $table->enum('delivery_status', ['Hủy', 'Thành công', 'Đang giao', 'Đang lấy hàng', 'Đang chờ xác nhận'])->default('Đang chờ xác nhận');
             $table->softDeletes();
             $table->timestamps();
         });
