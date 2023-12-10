@@ -25,5 +25,15 @@ class DatabaseSeeder extends Seeder
             'created_at' => $currentTimestamp,
             'updated_at' => $currentTimestamp
         ]);
+        DB::table('orders')->insert([
+            'user_id' => '1',
+            'address' => '123f',
+            'total' => 1000,
+            'shipment' => 'Thành công',
+            'status' => 'Đã thanh toán',
+            'deleted_at' => null,
+            'created_at' => $currentTimestamp,
+            'updated_at' => $currentTimestamp
+        ]);
     }
 }
