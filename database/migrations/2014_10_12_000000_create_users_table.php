@@ -22,6 +22,9 @@ return new class extends Migration
             $table->rememberToken();
             $table->timestamps();
             $table->string('role')->default('user'); // Mặc định là "user"
+            $table->string('firstName');
+            $table->string('lastName');
+            $table->string('phoneNumber');
         });
     }
 
