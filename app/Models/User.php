@@ -27,6 +27,9 @@ class User extends Authenticatable implements JWTSubject
         'name',
         'email',
         'password',
+        'phoneNumber',
+        'firstName',
+        'lastName'
     ];
 
     /**
@@ -48,7 +51,7 @@ class User extends Authenticatable implements JWTSubject
         'email_verified_at' => 'datetime',
     ];
 
-     /**
+    /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
      * @return mixed
@@ -57,7 +60,7 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->getKey();
     }
- 
+
     /**
      * Return a key value array, containing any custom claims to be added to the JWT.
      *

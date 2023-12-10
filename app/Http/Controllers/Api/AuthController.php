@@ -9,6 +9,7 @@ use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
@@ -51,12 +52,18 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6',
+            'phoneNumber' => 'required|min:6',
+            'firstName' => 'required|string|min:1',
+            'lastName' => 'required|string|min:1',
         ]);
-
+        
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'phoneNumber' => $request->phoneNumber,
+            'firstName' => $request->firstName,
+            'lastName' => $request->lastName
         ]);
 
         return response()->json([
