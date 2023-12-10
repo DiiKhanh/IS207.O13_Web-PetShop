@@ -15,6 +15,14 @@ return new class extends Migration
     {
         Schema::create('dog_product_items', function (Blueprint $table) {
             $table->id();
+            $table-> string('ItemName');
+            $table-> integer('Price');
+            $table-> string('Category');
+            $table-> string('Description');
+            $table-> string('Images');
+            $table-> integer('Quantity');
+            $table-> boolean('IsInStock');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
