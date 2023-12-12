@@ -66,8 +66,8 @@ class DogItemController extends Controller
     public function paginationPage()
     {
         //số sản phẩm mặc định được gọi trên một trang
-        $defaultDogItemCall = 2;
-        $list = DogItem::whereNull('deleted_at')->paginate($defaultDogItemCall);
+        // $defaultDogItemCall = 2;
+        $list = DogItem::whereNull('deleted_at')->paginate();
         if ($list == null) {
             return ApiResponse::notfound("Resource is empty");
         } else {
@@ -148,6 +148,7 @@ class DogItemController extends Controller
                 'HealthStatus' => 'nullable|string',
                 'Description' => 'nullable|string',
                 'Images' => 'nullable|array',
+                'IsInStock' => 'nullable|boolean'
             ]);
         } catch (ValidationException $e) {
             return ApiResponse::badrequest($e->errors());
@@ -215,5 +216,38 @@ class DogItemController extends Controller
         }
 
         return response()->json($response);
+    }
+
+    public function getDogByIdAdmin($id)
+    {
+        $product = DogItem::where('id', $id)->first();
+
+        if ($product) {
+            $product->Images = json_decode($product->Images);
+            return ApiResponse::ok($product);
+        } else {
+            return ApiResponse::notfound("Dog Item not found");
+        }
+    }
+
+    public function paginationPageAdmin()
+    {
+      $list = DogItem::withTrashed()->paginate();
+
+      if ($list->isEmpty()) {
+          return ApiResponse::notfound("Resource is empty");
+      } else {
+          $list->transform(function ($item) {
+              // Giải mã trường 'Images' từ JSON thành mảng
+              $images = json_decode($item->Images);
+              if (json_last_error() == JSON_ERROR_NONE) {
+                  $item->Images = $images;
+              } else {
+                  $item->Images = [];
+              }
+              return $item;
+          });
+          return ApiResponse::ok($list->toArray());
+      }
     }
 }
