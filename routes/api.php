@@ -76,6 +76,8 @@ Route::group([
         Route::post('/create', 'Api\DogItemController@create');
         Route::put('/update/{id}', 'Api\DogItemController@update');
         Route::delete('/delete/{id}', 'Api\DogItemController@delete');
+        Route::get('/all-admin', 'Api\DogItemController@paginationPageAdmin');
+        Route::get('/detail-admin/{id}', 'Api\DogItemController@getDogByIdAdmin');
     });
 });
 
@@ -93,5 +95,7 @@ Route::group([
         Route::post('/create','Api\ItemController@create');
         Route::put('/update/{id}','Api\ItemController@update');
         Route::delete('/delete/{id}','Api\ItemController@delete');
+        Route::get('/get-admin', 'Api\ItemController@paginationPageAdmin');
+        Route::get('/getdetail-admin/{id}', 'Api\ItemController@getDogByIdAdmin');
     });
 });

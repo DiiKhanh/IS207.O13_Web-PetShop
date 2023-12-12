@@ -11,7 +11,7 @@ class ItemController extends Controller
 {
     public function list()
     {
-        $list = DogProductItem::where('deleted_at', null)->get();
+        $list = DogProductItem::whereNull('deleted_at')->get();
         if (!$list) return ApiResponse::notfound("Resource is empty");
         else {
             $list->transform(function ($item) {
@@ -24,7 +24,8 @@ class ItemController extends Controller
 
     public function paginationPage()
     {
-        $list = DogProductItem::where('deleted_at', null)->paginate(1);
+        // $defaultDogItemCall = 2;
+        $list = DogProductItem::whereNull('deleted_at')->paginate();
         if (!$list) return ApiResponse::notfound("Resource is empty");
         else {
             $list->transform(function ($item) {
@@ -99,7 +100,8 @@ class ItemController extends Controller
             'Category' => 'nullable|string',
             'Description' => 'nullable|string',
             'Images' => 'nullable|array',
-            'Quantity' => 'nullable|integer'
+            'Quantity' => 'nullable|integer',
+            'IsInStock' => 'nullable|boolean'
         ]);
 
         $updated = DogProductItem::where('id', $rid)->where('deleted_at', null)->first();
@@ -108,7 +110,6 @@ class ItemController extends Controller
         }
         $updated->fill($request->input());
         $updated->save();
-           
         if ($updated) {
             $updated->images= $request->input('Images');
             return ApiResponse::ok($updated);
@@ -128,5 +129,36 @@ class ItemController extends Controller
         
     }
 
-    
+    public function getDogByIdAdmin($id)
+    {
+        $product = DogProductItem::where('id', $id)->first();
+
+        if ($product) {
+            $product->Images = json_decode($product->Images);
+            return ApiResponse::ok($product);
+        } else {
+            return ApiResponse::notfound("Dog Item not found");
+        }
+    }
+
+    public function paginationPageAdmin()
+    {
+      $list = DogProductItem::withTrashed()->paginate();
+
+      if ($list->isEmpty()) {
+          return ApiResponse::notfound("Resource is empty");
+      } else {
+          $list->transform(function ($item) {
+              // Giải mã trường 'Images' từ JSON thành mảng
+              $images = json_decode($item->Images);
+              if (json_last_error() == JSON_ERROR_NONE) {
+                  $item->Images = $images;
+              } else {
+                  $item->Images = [];
+              }
+              return $item;
+          });
+          return ApiResponse::ok($list->toArray());
+      }
+    }
 }
