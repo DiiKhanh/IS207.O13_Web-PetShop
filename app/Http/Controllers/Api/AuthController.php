@@ -139,4 +139,25 @@ class AuthController extends Controller
 
         return response()->json(['carts' => $carts]);
     }
+
+    public function changePassword(Request $request)
+    {
+        # Validation
+        $request->validate([
+            'old_password' => 'required',
+            'new_password' => 'required',
+        ]);
+        #Match The Old Password
+        if(!Hash::check($request->old_password, Auth::user()->password)){
+            return response()->json(['error' => "Mật khẩu cũ không chính xác"]);
+        }
+
+
+        #Update the new Password
+        User::whereId(Auth::user()->id)->update([
+            'password' => Hash::make($request->new_password)
+        ]);
+
+        return response()->json(['status' => 200, 'data' => 'success']);
+    }
 }
