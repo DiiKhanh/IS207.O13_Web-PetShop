@@ -23,7 +23,7 @@ Route::group([
     Route::post('/logout', 'Api\AuthController@logout');
     Route::post('/refresh', 'Api\AuthController@refresh');
     Route::get('/user-profile', 'Api\AuthController@userProfile');
-    Route::post('/change-password', 'Api\AuthController@changePassWord');
+    Route::post('/change-password', 'Api\AuthController@changePassword');
     Route::post('/carts', 'Api\AuthController@addCarts');
     Route::get('/get-carts', 'Api\AuthController@getCarts');
     Route::middleware(['checkAdmin'])->group(function () {
