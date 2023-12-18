@@ -86,16 +86,36 @@ Route::group([
     'namespace' => 'App\Http\Controllers',
     'prefix' => 'item'
 ], function ($router) {
-    Route::get('/','Api\ItemController@list');
-    Route::get('/get/{id}','Api\ItemController@getProductbyId');
-    Route::get('/search/{name}','Api\ItemController@getProductbyName');
+    Route::get('/', 'Api\ItemController@list');
+    Route::get('/get/{id}', 'Api\ItemController@getProductbyId');
+    Route::get('/search/{name}', 'Api\ItemController@getProductbyName');
     Route::get('/all', 'Api\ItemController@paginationPage');
     Route::middleware(['checkAdmin'])->group(function () {
         // Áp dụng middleware 'checkAdmin' chỉ cho tuyến đường '/user-admin'
-        Route::post('/create','Api\ItemController@create');
-        Route::put('/update/{id}','Api\ItemController@update');
-        Route::delete('/delete/{id}','Api\ItemController@delete');
+        Route::post('/create', 'Api\ItemController@create');
+        Route::put('/update/{id}', 'Api\ItemController@update');
+        Route::delete('/delete/{id}', 'Api\ItemController@delete');
         Route::get('/get-admin', 'Api\ItemController@paginationPageAdmin');
         Route::get('/getdetail-admin/{id}', 'Api\ItemController@getDogByIdAdmin');
+    });
+});
+
+
+
+// api route của Appointment
+Route::group([
+    'middleware' => 'api',
+    'namespace' => 'App\Http\Controllers',
+    'prefix' => 'appointment'
+], function ($router) {
+    Route::middleware(['checkAdmin'])->group(function () {
+        // Áp dụng middleware 'checkAdmin' chỉ cho tuyến đường '/user-admin'
+        //Route::get('/admin/', 'Api\AppointmentController@index');
+    });
+
+    Route::middleware(['checkUser'])->group(function () {
+        //Route::get('/user/', 'Api\OrderController@index');
+        //Route::get('/user', 'Api\AppointmentController@');
+        Route::post('/user/create', 'Api\AppointmentController@create');
     });
 });
