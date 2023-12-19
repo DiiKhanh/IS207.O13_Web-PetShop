@@ -16,6 +16,7 @@ class DogProductItem extends Model
         'Category',
         'Description',
         'Images',
-        'Quantity'
+        'Quantity',
+        'IsInStock'
     ];
 }
