@@ -29,6 +29,7 @@ Route::group([
     Route::middleware(['checkAdmin'])->group(function () {
         // Áp dụng middleware 'checkAdmin' chỉ cho tuyến đường '/user-admin'
         Route::get('/user-admin', 'Api\AuthController@userAdmin');
+        Route::get('/get-all', 'Api\AuthController@getAllUser');
     });
 });
 
@@ -98,4 +99,28 @@ Route::group([
         Route::get('/get-admin', 'Api\ItemController@paginationPageAdmin');
         Route::get('/getdetail-admin/{id}', 'Api\ItemController@getDogByIdAdmin');
     });
+});
+
+Route::group([
+    'middleware' => 'api',
+    'namespace' => 'App\Http\Controllers',
+    'prefix' => 'checkout'
+], function ($router) {
+    Route::post('/', 'Api\CheckoutController@create');
+    Route::get('/list/{user_id}', 'Api\CheckoutController@getByUser');
+    Route::get('/detail/{id}', 'Api\CheckoutController@getById');
+    Route::post('/vnpay', 'Api\CheckoutController@checkoutVnp');
+    Route::middleware(['checkAdmin'])->group(function () {
+        // Áp dụng middleware 'checkAdmin' chỉ cho tuyến đường '/user-admin'
+        Route::get('/get-all', 'Api\CheckoutController@getAll');
+        Route::put('/update/{id}', 'Api\CheckoutController@update');
+    });
+});
+
+Route::group([
+    'middleware' => 'api',
+    'namespace' => 'App\Http\Controllers',
+    'prefix' => 'email'
+], function ($router) {
+    Route::post('/send', 'Api\SendEmailController@checkout');
 });
