@@ -86,16 +86,35 @@ Route::group([
     'namespace' => 'App\Http\Controllers',
     'prefix' => 'item'
 ], function ($router) {
-    Route::get('/','Api\ItemController@list');
-    Route::get('/get/{id}','Api\ItemController@getProductbyId');
-    Route::get('/search/{name}','Api\ItemController@getProductbyName');
+    Route::get('/', 'Api\ItemController@list');
+    Route::get('/get/{id}', 'Api\ItemController@getProductbyId');
+    Route::get('/search/{name}', 'Api\ItemController@getProductbyName');
     Route::get('/all', 'Api\ItemController@paginationPage');
     Route::middleware(['checkAdmin'])->group(function () {
         // Áp dụng middleware 'checkAdmin' chỉ cho tuyến đường '/user-admin'
-        Route::post('/create','Api\ItemController@create');
-        Route::put('/update/{id}','Api\ItemController@update');
-        Route::delete('/delete/{id}','Api\ItemController@delete');
+        Route::post('/create', 'Api\ItemController@create');
+        Route::put('/update/{id}', 'Api\ItemController@update');
+        Route::delete('/delete/{id}', 'Api\ItemController@delete');
         Route::get('/get-admin', 'Api\ItemController@paginationPageAdmin');
         Route::get('/getdetail-admin/{id}', 'Api\ItemController@getDogByIdAdmin');
+    });
+});
+
+Route::group([
+    'middleware' => 'api',
+    'namespace' => 'App\Http\Controllers',
+    'prefix' => 'voucher'
+], function ($router) {
+    // Customer chỉ lấy thông tin về loại voucher và giá trị giảm giá của 1 voucher thông qua mã code của voucher
+    Route::get('/get/{code}', 'Api\VoucherController@getVoucherByCode');
+    // Admin có thể lấy tất cả, tìm kiếm một voucher thông qua mã code hoặc id, phân trang, lấy chi tiết, tạo, sửa, xoá 
+    Route::middleware(['checkAdmin'])->group(function () {
+        Route::get('/', 'Api\VoucherController@list');
+        Route::get('/search-admin/{code}', 'Api\VoucherController@searchVoucher');
+        Route::get('/getpagin-admin', 'Api\VoucherController@paginationPageAdmin');
+        Route::get('/getdetail-admin/{id}', 'Api\VoucherController@getVoucherByIdAdmin');
+        Route::post('/create', 'Api\VoucherController@create');
+        Route::put('/update/{id}', 'Api\VoucherController@update');
+        Route::delete('/delete/{id}', 'Api\VoucherController@delete');
     });
 });
