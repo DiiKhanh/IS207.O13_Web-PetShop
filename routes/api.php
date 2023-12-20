@@ -110,7 +110,6 @@ Route::group([
     // Admin có thể lấy tất cả, tìm kiếm một voucher thông qua mã code hoặc id, phân trang, lấy chi tiết, tạo, sửa, xoá 
     Route::middleware(['checkAdmin'])->group(function () {
         Route::get('/', 'Api\VoucherController@list');
-        Route::get('/search-admin/{code}', 'Api\VoucherController@searchVoucher');
         Route::get('/getpagin-admin', 'Api\VoucherController@paginationPageAdmin');
         Route::get('/getdetail-admin/{id}', 'Api\VoucherController@getVoucherByIdAdmin');
         Route::post('/create', 'Api\VoucherController@create');

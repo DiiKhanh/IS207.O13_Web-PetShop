@@ -26,15 +26,11 @@ class VoucherController extends Controller
             return ApiResponse::ok($voucher);
         } else return ApiResponse::notfound("Product Item not found");
     }
-
-    // public function searchVoucher(Request $request)
-    // {
-    // }
     public function create(Request $request)
     {
         $request->validate([
             'code' => 'required|string',
-            'discount_type' => 'required|in:percentage, fixed_amount',
+            'discount_type' => 'required|in:percentage,fixed_amount',
             'discount_value' => 'required|numeric',
             'start_date' => 'required|date',
             'end_date' => 'required|date',
@@ -64,7 +60,7 @@ class VoucherController extends Controller
     {
         $request->validate([
             'code' => 'required|string',
-            'discount_type' => 'required|in:percentage, fixed_amount',
+            'discount_type' => 'required|in:percentage,fixed_amount',
             'discount_value' => 'required|numeric',
             'start_date' => 'required|date',
             'end_date' => 'required|date',
@@ -72,15 +68,12 @@ class VoucherController extends Controller
             'current_usage' => 'nullable|numeric'
         ]);
 
-        $updated = Voucher::where('id', $rid)->where('deleted_at', null)->first();
-        // Kiểm tra nếu như số lần sử dụng của voucher chuẩn bị cập nhật
-        // có lớn hơn số lần được sử dụng
-        if (!is_null($request->input('max_usage'))) {
-            if ($updated->current_usage > $request->input('max_usage')) {
-                $updated->deleted_at = now();
-            }
-        }
+        $updated = Voucher::where('voucher_id', $rid)->where('deleted_at', null)->first();
+
         $updated->fill($request->input());
+        if ($updated->current_usage >= $updated->max_usage) {
+            $updated->deleted_at = now();
+        }
         $updated->save();
         if ($updated) {
             return ApiResponse::ok($updated);
@@ -89,7 +82,7 @@ class VoucherController extends Controller
 
     public function delete($rid)
     {
-        $deleted = Voucher::where('id', $rid)->first();
+        $deleted = Voucher::where('voucher_id', $rid)->first();
         if (!$deleted)  return ApiResponse::notfound("cannot find voucher to delete");
         else {
             $deleted->delete();
@@ -99,7 +92,7 @@ class VoucherController extends Controller
 
     public function getVoucherByIdAdmin($id)
     {
-        $voucher = Voucher::where('id', $id)->first();
+        $voucher = Voucher::where('voucher_id', $id)->first();
 
         if ($voucher) {
             return ApiResponse::ok($voucher);
