@@ -152,6 +152,7 @@ Route::group([
         Route::get('/admin/', 'Api\AppointmentController@index');
         Route::put('/admin/updatestatus/{id}', 'Api\AppointmentController@updateStatus');
         Route::put('/admin/updatetime/{id}', 'Api\AppointmentController@updateDateAndHour');
+        Route::get('/admin/dashboard', 'Api\AppointmentController@dashboard');
     });
 
     Route::middleware(['checkUser'])->group(function () {
