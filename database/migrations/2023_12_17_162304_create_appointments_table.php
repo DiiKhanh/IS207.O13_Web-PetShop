@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('phone_number');
             $table->string('service');
             $table->string('date');
-            $table->integer('hour');
+            $table->string('hour');
             $table->string('description')->nullable();
             $table->string('status')->nullable();
             $table->string('result')->nullable();

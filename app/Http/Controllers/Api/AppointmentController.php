@@ -21,8 +21,8 @@ class AppointmentController extends Controller
             'dog_item_id' => 'required|integer',
             'phone_number' => 'required|string',
             'service' => 'required|string',
-            'date' => 'required|date',
-            'hour' => 'required|integer',
+            'date' => 'required|string',
+            'hour' => 'required|string',
             'description' => 'nullable|string',
         ]);
 
