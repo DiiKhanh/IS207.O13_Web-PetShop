@@ -141,3 +141,22 @@ Route::group([
         Route::delete('/delete/{id}', 'Api\VoucherController@delete');
     });
 });
+
+Route::group([
+    'middleware' => 'api',
+    'namespace' => 'App\Http\Controllers',
+    'prefix' => 'appointment'
+], function ($router) {
+    Route::middleware(['checkAdmin'])->group(function () {
+        // Áp dụng middleware 'checkAdmin' chỉ cho tuyến đường '/user-admin'
+        Route::get('/admin/', 'Api\AppointmentController@index');
+        Route::put('/admin/updatestatus/{id}', 'Api\AppointmentController@updateStatus');
+        Route::put('/admin/updatetime/{id}', 'Api\AppointmentController@updateDateAndHour');
+    });
+
+    Route::middleware(['checkUser'])->group(function () {
+        Route::get('/user/', 'Api\AppointmentController@index');
+        Route::post('/user/create', 'Api\AppointmentController@create');
+        Route::put('/user/update/{id}', 'Api\AppointmentController@cancel');
+    });
+});
