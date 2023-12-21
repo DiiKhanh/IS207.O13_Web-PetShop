@@ -160,4 +160,15 @@ class AuthController extends Controller
 
         return response()->json(['status' => 200, 'data' => 'success']);
     }
+
+    public function getAllUser()
+    {
+        $list = User::all();
+
+        if ($list->isEmpty()) {
+            return ApiResponse::notfound("Không tìm thấy");
+        } else {
+            return ApiResponse::ok($list->toArray());
+        }
+    }
 }

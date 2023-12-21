@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('Origin');
             $table->string('HealthStatus');
             $table->string('Description');
-            $table->string('Images');
+            $table->longText('Images');
             $table->boolean('IsInStock')->nullable();
             // $table->boolean('IsDeleted'); // Tạo cột is_deleted kiểu boolean
             $table->softDeletes();

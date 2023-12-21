@@ -29,6 +29,7 @@ Route::group([
     Route::middleware(['checkAdmin'])->group(function () {
         // Áp dụng middleware 'checkAdmin' chỉ cho tuyến đường '/user-admin'
         Route::get('/user-admin', 'Api\AuthController@userAdmin');
+        Route::get('/get-all', 'Api\AuthController@getAllUser');
     });
 });
 
@@ -86,23 +87,61 @@ Route::group([
     'namespace' => 'App\Http\Controllers',
     'prefix' => 'item'
 ], function ($router) {
-    Route::get('/', 'Api\ItemController@list');
-    Route::get('/get/{id}', 'Api\ItemController@getProductbyId');
-    Route::get('/search/{name}', 'Api\ItemController@getProductbyName');
+    Route::get('/','Api\ItemController@list');
+    Route::get('/get/{id}','Api\ItemController@getProductbyId');
+    Route::get('/search/{name}','Api\ItemController@getProductbyName');
     Route::get('/all', 'Api\ItemController@paginationPage');
     Route::middleware(['checkAdmin'])->group(function () {
         // Áp dụng middleware 'checkAdmin' chỉ cho tuyến đường '/user-admin'
-        Route::post('/create', 'Api\ItemController@create');
-        Route::put('/update/{id}', 'Api\ItemController@update');
-        Route::delete('/delete/{id}', 'Api\ItemController@delete');
+        Route::post('/create','Api\ItemController@create');
+        Route::put('/update/{id}','Api\ItemController@update');
+        Route::delete('/delete/{id}','Api\ItemController@delete');
         Route::get('/get-admin', 'Api\ItemController@paginationPageAdmin');
         Route::get('/getdetail-admin/{id}', 'Api\ItemController@getDogByIdAdmin');
     });
 });
 
+Route::group([
+    'middleware' => 'api',
+    'namespace' => 'App\Http\Controllers',
+    'prefix' => 'checkout'
+], function ($router) {
+    Route::post('/', 'Api\CheckoutController@create');
+    Route::get('/list/{user_id}', 'Api\CheckoutController@getByUser');
+    Route::get('/detail/{id}', 'Api\CheckoutController@getById');
+    Route::post('/vnpay', 'Api\CheckoutController@checkoutVnp');
+    Route::middleware(['checkAdmin'])->group(function () {
+        // Áp dụng middleware 'checkAdmin' chỉ cho tuyến đường '/user-admin'
+        Route::get('/get-all', 'Api\CheckoutController@getAll');
+        Route::put('/update/{id}', 'Api\CheckoutController@update');
+    });
+});
 
+Route::group([
+    'middleware' => 'api',
+    'namespace' => 'App\Http\Controllers',
+    'prefix' => 'email'
+], function ($router) {
+    Route::post('/send', 'Api\SendEmailController@checkout');
+});
 
-// api route của Appointment
+Route::group([
+    'middleware' => 'api',
+    'namespace' => 'App\Http\Controllers',
+    'prefix' => 'vouchers'
+], function ($router) {
+    // Customer chỉ lấy thông tin về loại voucher và giá trị giảm giá của 1 voucher thông qua mã code của voucher
+    Route::get('/get/{code}', 'Api\VoucherController@getVoucherByCode');
+    Route::get('/list', 'Api\VoucherController@listVoucher');
+
+    // Admin có thể lấy tất cả, tìm kiếm một voucher thông qua mã code hoặc id, phân trang, lấy chi tiết, tạo, sửa, xoá 
+    Route::middleware(['checkAdmin'])->group(function () {
+        Route::post('/create', 'Api\VoucherController@create');
+        Route::get('/all', 'Api\VoucherController@list');
+        Route::delete('/delete/{id}', 'Api\VoucherController@delete');
+    });
+});
+
 Route::group([
     'middleware' => 'api',
     'namespace' => 'App\Http\Controllers',
