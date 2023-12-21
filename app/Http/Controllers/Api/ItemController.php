@@ -146,7 +146,7 @@ class ItemController extends Controller
       $list = DogProductItem::withTrashed()->paginate();
 
       if ($list->isEmpty()) {
-          return ApiResponse::notfound("Resource is empty");
+        return ApiResponse::notfound("Resource is empty");
       } else {
           $list->transform(function ($item) {
               // Giải mã trường 'Images' từ JSON thành mảng
@@ -160,5 +160,14 @@ class ItemController extends Controller
           });
           return ApiResponse::ok($list->toArray());
       }
+    // $list = DogProductItem::whereNull('deleted_at')->get();
+    // if (!$list) return ApiResponse::notfound("Resource is empty");
+    // else {
+    //     $list->transform(function ($item) {
+    //         $item->Images = json_decode($item->Images);
+    //         return $item;
+    //     });
+    //     return ApiResponse::ok($list->toArray());
+    // }
     }
 }

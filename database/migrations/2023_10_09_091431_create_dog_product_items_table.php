@@ -19,7 +19,7 @@ return new class extends Migration
             $table-> integer('Price');
             $table-> string('Category');
             $table-> string('Description');
-            $table-> string('Images');
+            $table-> longText('Images');
             $table-> integer('Quantity');
             $table-> boolean('IsInStock');
             $table->softDeletes();

@@ -124,3 +124,20 @@ Route::group([
 ], function ($router) {
     Route::post('/send', 'Api\SendEmailController@checkout');
 });
+
+Route::group([
+    'middleware' => 'api',
+    'namespace' => 'App\Http\Controllers',
+    'prefix' => 'vouchers'
+], function ($router) {
+    // Customer chỉ lấy thông tin về loại voucher và giá trị giảm giá của 1 voucher thông qua mã code của voucher
+    Route::get('/get/{code}', 'Api\VoucherController@getVoucherByCode');
+    Route::get('/list', 'Api\VoucherController@listVoucher');
+
+    // Admin có thể lấy tất cả, tìm kiếm một voucher thông qua mã code hoặc id, phân trang, lấy chi tiết, tạo, sửa, xoá 
+    Route::middleware(['checkAdmin'])->group(function () {
+        Route::post('/create', 'Api\VoucherController@create');
+        Route::get('/all', 'Api\VoucherController@list');
+        Route::delete('/delete/{id}', 'Api\VoucherController@delete');
+    });
+});
